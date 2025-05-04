@@ -1,11 +1,8 @@
 
 import React from "react";
 import { Task } from "@/lib/types";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Check, Trash2, Pencil } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Trash2, Pencil } from "lucide-react";
 
 interface TaskItemProps {
   task: Task;
@@ -21,47 +18,41 @@ export function TaskItem({
   onEdit,
 }: TaskItemProps) {
   return (
-    <Card className="mb-3 hover:shadow-md transition-shadow">
-      <CardContent className="p-4 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <Checkbox
-            checked={task.completed}
-            onCheckedChange={(checked) => 
-              onToggleComplete(task.id, checked === true)
-            }
-            className="h-5 w-5"
-          />
+    <div className="card task-item">
+      <div className="task-item-content">
+        <div className="task-item-left">
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              className={`checkbox ${task.completed ? "checkbox-checked" : ""}`}
+              checked={task.completed}
+              onChange={(e) => onToggleComplete(task.id, e.target.checked)}
+            />
+          </div>
           <span 
-            className={cn(
-              "text-lg transition-opacity", 
-              task.completed && "line-through opacity-70"
-            )}
+            className={`task-title ${task.completed ? "task-title-completed" : ""}`}
           >
             {task.title}
           </span>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
+        <div className="task-item-actions">
+          <button 
+            className="btn btn-outline btn-icon task-action-btn"
             onClick={() => onEdit(task)}
-            className="h-8 w-8 p-0"
           >
             <Pencil className="h-4 w-4" />
             <span className="sr-only">Modifier</span>
-          </Button>
-          <Button 
-            variant="destructive" 
-            size="sm" 
+          </button>
+          <button 
+            className="btn btn-destructive btn-icon task-action-btn"
             onClick={() => onDelete(task.id)}
-            className="h-8 w-8 p-0"
           >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Supprimer</span>
-          </Button>
+          </button>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

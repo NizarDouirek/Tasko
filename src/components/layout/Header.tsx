@@ -1,7 +1,6 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { LogOut, Plus, CheckCircle } from "lucide-react";
+import { LogOut, CheckCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 
@@ -9,30 +8,33 @@ export function Header() {
   const { user, logout, isAuthenticated } = useAuth();
 
   return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <CheckCircle className="h-6 w-6 text-primary" />
-          <Link to="/" className="text-xl font-bold">Task Master</Link>
+    <header className="header">
+      <div className="container header-container">
+        <div className="header-logo">
+          <CheckCircle className="header-logo-icon" />
+          <Link to="/">Task Master</Link>
         </div>
         
         {isAuthenticated ? (
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-muted-foreground hidden sm:inline">
+          <div className="header-actions">
+            <span className="header-welcome">
               Bienvenue, {user?.username}
             </span>
-            <Button variant="ghost" size="sm" onClick={() => logout()}>
-              <LogOut className="h-4 w-4 mr-2" />
+            <button 
+              className="btn btn-ghost btn-sm"
+              onClick={() => logout()}
+            >
+              <LogOut className="h-4 w-4" />
               <span>Déconnexion</span>
-            </Button>
+            </button>
           </div>
         ) : (
-          <div className="flex items-center space-x-2">
+          <div className="header-actions">
             <Link to="/auth/login">
-              <Button variant="ghost" size="sm">Se connecter</Button>
+              <button className="btn btn-ghost btn-sm">Se connecter</button>
             </Link>
             <Link to="/auth/register">
-              <Button size="sm">S'inscrire</Button>
+              <button className="btn btn-sm btn-default">S'inscrire</button>
             </Link>
           </div>
         )}

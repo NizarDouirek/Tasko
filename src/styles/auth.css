@@ -1,0 +1,59 @@
+
+/* Auth Forms */
+.auth-container {
+  min-height: calc(100vh - 12rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.auth-card-header {
+  text-align: center;
+}
+
+.auth-card-title {
+  font-size: 1.5rem;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
+.tabs-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid hsl(var(--border));
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: hsl(var(--primary));
+}
+
+.tab-selected {
+  border-bottom-color: hsl(var(--primary));
+  color: hsl(var(--primary));
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content-visible {
+  display: block;
+}
