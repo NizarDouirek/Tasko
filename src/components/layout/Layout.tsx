@@ -44,7 +44,7 @@ export function Layout({ children, requiresAuth = false }: LayoutProps) {
         </div>
       </main>
       <footer className="bg-white border-t border-gray-200 py-4 text-center text-sm text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} Task Master</p>
+        <p>&copy; {new Date().getFullYear()} Taskoo</p>
       </footer>
     </div>
   );
