@@ -1,163 +1,108 @@
 
-import { LoginCredentials, RegisterData, Task, User } from "./types";
+import { User, LoginCredentials, RegisterData } from "./types";
 
-// Simulate local storage persistence
-const USERS_KEY = "task-master-users";
-const TASKS_KEY = "task-master-tasks";
-const CURRENT_USER_KEY = "task-master-current-user";
-
-// Initialize mock data if not exists
-const initializeStorage = () => {
-  if (!localStorage.getItem(USERS_KEY)) {
-    localStorage.setItem(USERS_KEY, JSON.stringify([]));
+// Simulation d'une base de données pour les utilisateurs
+let users: User[] = [
+  {
+    id: "user-1",
+    username: "Jean Dupont",
+    email: "user@example.com",
+    role: "user"
+  },
+  {
+    id: "user-2",
+    username: "Marie Martin",
+    email: "marie@example.com",
+    role: "user"
+  },
+  {
+    id: "admin-1",
+    username: "Admin",
+    email: "admin@example.com",
+    role: "admin"
   }
-  if (!localStorage.getItem(TASKS_KEY)) {
-    localStorage.setItem(TASKS_KEY, JSON.stringify([]));
-  }
-};
+];
 
-// Helper to simulate network delay
+// Utilisateur actuellement connecté (simulé)
+let currentUser: User | null = null;
+
+// Délai artificiel pour simuler une latence réseau
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Auth API
 export const authApi = {
+  login: async (credentials: LoginCredentials): Promise<User> => {
+    await delay(1000); // Simule une latence réseau
+
+    // Dans un cas réel, on vérifierait le mot de passe
+    const user = users.find(u => u.email === credentials.email);
+    
+    if (!user) {
+      throw new Error("Identifiants invalides");
+    }
+
+    // Mot de passe pour tests: 
+    // - utilisateur standard: "password" pour user@example.com
+    // - administrateur: "admin123" pour admin@example.com
+    if (
+      (credentials.email === "user@example.com" && credentials.password !== "password") ||
+      (credentials.email === "admin@example.com" && credentials.password !== "admin123") ||
+      (credentials.email === "marie@example.com" && credentials.password !== "password")
+    ) {
+      throw new Error("Identifiants invalides");
+    }
+
+    // Simule la sauvegarde de l'utilisateur en session
+    currentUser = user;
+    localStorage.setItem("user", JSON.stringify(user));
+    
+    return user;
+  },
+
   register: async (data: RegisterData): Promise<User> => {
-    initializeStorage();
-    await delay(500); // Simulate network delay
+    await delay(1000); // Simule une latence réseau
     
-    const users = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-    
-    // Check if email already exists
-    if (users.some((user: User) => user.email === data.email)) {
+    // Vérifie si l'email existe déjà
+    if (users.some(user => user.email === data.email)) {
       throw new Error("Cet email est déjà utilisé");
     }
-    
+
+    // Crée un nouvel utilisateur (avec le rôle "user" par défaut)
     const newUser: User = {
-      id: Date.now().toString(),
+      id: `user-${Date.now()}`,
       username: data.username,
-      email: data.email
+      email: data.email,
+      role: "user"
     };
     
-    // Save user
-    users.push({...newUser, password: data.password});
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    users.push(newUser);
     
-    // Set as current user
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(newUser));
+    // Simule la sauvegarde de l'utilisateur en session
+    currentUser = newUser;
+    localStorage.setItem("user", JSON.stringify(newUser));
     
     return newUser;
   },
-  
-  login: async (credentials: LoginCredentials): Promise<User> => {
-    initializeStorage();
-    await delay(500); // Simulate network delay
-    
-    const users = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-    const user = users.find(
-      (u: any) => u.email === credentials.email && u.password === credentials.password
-    );
-    
-    if (!user) {
-      throw new Error("Email ou mot de passe incorrect");
-    }
-    
-    const userData: User = {
-      id: user.id,
-      username: user.username,
-      email: user.email
-    };
-    
-    // Set as current user
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(userData));
-    
-    return userData;
-  },
-  
-  logout: async (): Promise<void> => {
-    await delay(200); // Simulate network delay
-    localStorage.removeItem(CURRENT_USER_KEY);
-  },
-  
-  getCurrentUser: async (): Promise<User | null> => {
-    await delay(300); // Simulate network delay
-    const userData = localStorage.getItem(CURRENT_USER_KEY);
-    return userData ? JSON.parse(userData) : null;
-  }
-};
 
-// Tasks API
-export const tasksApi = {
-  getTasks: async (userId: string): Promise<Task[]> => {
-    initializeStorage();
-    await delay(500); // Simulate network delay
-    
-    const allTasks = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
-    const userTasks = allTasks
-      .filter((task: Task) => task.userId === userId)
-      .map((task: any) => ({
-        ...task,
-        createdAt: new Date(task.createdAt)
-      }));
-    
-    return userTasks;
+  logout: async (): Promise<void> => {
+    await delay(500); // Simule une latence réseau
+    currentUser = null;
+    localStorage.removeItem("user");
   },
-  
-  addTask: async (userId: string, title: string): Promise<Task> => {
-    initializeStorage();
-    await delay(300); // Simulate network delay
+
+  getCurrentUser: async (): Promise<User | null> => {
+    await delay(500); // Simule une latence réseau
     
-    const newTask: Task = {
-      id: `task-${Date.now()}`,
-      userId,
-      title,
-      completed: false,
-      createdAt: new Date()
-    };
-    
-    const allTasks = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
-    allTasks.push(newTask);
-    localStorage.setItem(TASKS_KEY, JSON.stringify(allTasks));
-    
-    return newTask;
-  },
-  
-  updateTask: async (taskId: string, updates: Partial<Task>): Promise<Task> => {
-    initializeStorage();
-    await delay(300); // Simulate network delay
-    
-    const allTasks = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
-    const taskIndex = allTasks.findIndex((t: Task) => t.id === taskId);
-    
-    if (taskIndex === -1) {
-      throw new Error("Tâche non trouvée");
+    // Si un utilisateur est stocké localement, on le récupère
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      currentUser = JSON.parse(storedUser) as User;
     }
     
-    const updatedTask = {
-      ...allTasks[taskIndex],
-      ...updates,
-      createdAt: allTasks[taskIndex].createdAt // Preserve original date
-    };
-    
-    allTasks[taskIndex] = updatedTask;
-    localStorage.setItem(TASKS_KEY, JSON.stringify(allTasks));
-    
-    return {
-      ...updatedTask,
-      createdAt: new Date(updatedTask.createdAt)
-    };
+    return currentUser;
   },
-  
-  deleteTask: async (taskId: string): Promise<void> => {
-    initializeStorage();
-    await delay(300); // Simulate network delay
-    
-    const allTasks = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
-    const filteredTasks = allTasks.filter((t: Task) => t.id !== taskId);
-    
-    if (filteredTasks.length === allTasks.length) {
-      throw new Error("Tâche non trouvée");
-    }
-    
-    localStorage.setItem(TASKS_KEY, JSON.stringify(filteredTasks));
+
+  getAllUsers: async (): Promise<User[]> => {
+    await delay(500);
+    return [...users];
   }
 };

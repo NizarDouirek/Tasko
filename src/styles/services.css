@@ -1,0 +1,249 @@
+
+/* Styles pour les demandes de service */
+
+/* Liste de demandes */
+.service-request-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Éléments de demande */
+.service-request-item {
+  background-color: white;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  padding: 1.5rem;
+  position: relative;
+  transition: box-shadow 0.2s ease;
+}
+
+.service-request-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.service-request-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.service-request-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.service-request-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.status-icon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.status-pending {
+  color: hsl(40, 100%, 50%);
+}
+
+.status-accepted {
+  color: hsl(142, 76%, 36%);
+}
+
+.status-rejected {
+  color: hsl(0, 84%, 60%);
+}
+
+.status-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.status-text.status-pending {
+  color: hsl(40, 100%, 50%);
+}
+
+.status-text.status-accepted {
+  color: hsl(142, 76%, 36%);
+}
+
+.status-text.status-rejected {
+  color: hsl(0, 84%, 60%);
+}
+
+.service-request-description {
+  margin-bottom: 1rem;
+  color: hsl(var(--muted-foreground));
+  white-space: pre-line;
+}
+
+.service-request-attachment {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.attachment-icon {
+  color: hsl(var(--primary));
+  height: 1rem;
+  width: 1rem;
+  margin-right: 0.5rem;
+}
+
+.service-request-date {
+  font-size: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1rem;
+}
+
+.service-request-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.action-icon {
+  height: 0.875rem;
+  width: 0.875rem;
+}
+
+/* Formulaire */
+.service-form-dialog {
+  max-width: 500px;
+}
+
+/* Chargement */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: hsl(var(--primary));
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Dashboard */
+.dashboard-container {
+  padding: 1.5rem 0;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+}
+
+.new-request-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.service-requests-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Admin */
+.admin-container {
+  padding: 1.5rem 0;
+}
+
+.admin-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: hsl(var(--foreground));
+  margin-bottom: 1.5rem;
+}
+
+.admin-tabs {
+  margin-bottom: 1.5rem;
+}
+
+.admin-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.admin-tab-content {
+  padding: 1rem 0;
+}
+
+/* Liste des utilisateurs */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.users-table th,
+.users-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.users-table th {
+  font-weight: 600;
+  background-color: hsl(var(--muted));
+}
+
+.users-table tbody tr:hover {
+  background-color: hsl(var(--accent));
+}
+
+@media (max-width: 768px) {
+  .service-request-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .admin-tabs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}

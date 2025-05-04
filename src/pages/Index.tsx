@@ -1,40 +1,52 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle, List, User } from "lucide-react";
+import { CheckCircle, FileText, Users, ShieldCheck } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
+  const { isAuthenticated, isAdmin } = useAuth();
+  
   return (
     <Layout>
       <div className="hero">
-        <div className="max-w-3xl mx-auto">
+        <div className="hero-content">
           <div className="hero-icon">
             <div className="hero-icon-circle">
-              <CheckCircle className="h-12 w-12 text-primary" />
+              <FileText className="h-12 w-12 text-primary" />
             </div>
           </div>
 
           <h1 className="hero-title">
-            Gérez vos tâches simplement
+            MonService.ma
           </h1>
 
           <p className="hero-description">
-            Une application simple et intuitive pour gérer vos tâches quotidiennes. 
-            Créez, organisez et suivez vos tâches en toute simplicité.
+            Plateforme simple et intuitive pour gérer vos demandes de service
           </p>
 
           <div className="hero-actions">
-            <Link to="/auth/register">
-              <button className="btn btn-default btn-lg">
-                Commencer
-              </button>
-            </Link>
-            <Link to="/auth/login">
-              <button className="btn btn-outline btn-lg">
-                Se connecter
-              </button>
-            </Link>
+            {!isAuthenticated ? (
+              <>
+                <Link to="/auth/register">
+                  <button className="btn btn-default btn-lg">
+                    S'inscrire
+                  </button>
+                </Link>
+                <Link to="/auth/login">
+                  <button className="btn btn-outline btn-lg">
+                    Se connecter
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <Link to={isAdmin() ? "/admin" : "/dashboard"}>
+                <button className="btn btn-default btn-lg">
+                  Accéder à mon espace
+                </button>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -44,11 +56,11 @@ const Index = () => {
           <div className="features-grid">
             <div className="feature-card">
               <div className="feature-icon">
-                <List />
+                <FileText />
               </div>
-              <h3 className="feature-title">Gestion de tâches</h3>
+              <h3 className="feature-title">Demandes de service</h3>
               <p className="feature-description">
-                Créez, modifiez et supprimez facilement vos tâches.
+                Créez et suivez vos demandes de service facilement
               </p>
             </div>
 
@@ -56,19 +68,29 @@ const Index = () => {
               <div className="feature-icon">
                 <CheckCircle />
               </div>
-              <h3 className="feature-title">Suivi de progression</h3>
+              <h3 className="feature-title">Suivi de statut</h3>
               <p className="feature-description">
-                Marquez les tâches comme terminées et suivez votre progression.
+                Suivez l'état de vos demandes en temps réel
               </p>
             </div>
 
             <div className="feature-card">
               <div className="feature-icon">
-                <User />
+                <Users />
               </div>
-              <h3 className="feature-title">Comptes utilisateurs</h3>
+              <h3 className="feature-title">Espace utilisateur</h3>
               <p className="feature-description">
-                Créez votre compte pour conserver vos tâches en sécurité.
+                Gérez votre profil et vos demandes à un seul endroit
+              </p>
+            </div>
+            
+            <div className="feature-card">
+              <div className="feature-icon">
+                <ShieldCheck />
+              </div>
+              <h3 className="feature-title">Administration</h3>
+              <p className="feature-description">
+                Panel d'administration pour gérer les demandes et utilisateurs
               </p>
             </div>
           </div>

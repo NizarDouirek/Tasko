@@ -1,24 +1,33 @@
 
 import React from "react";
-import { LogOut, CheckCircle } from "lucide-react";
+import { LogOut, FileText, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 export function Header() {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, isAdmin } = useAuth();
 
   return (
     <header className="header">
       <div className="container header-container">
         <div className="header-logo">
-          <CheckCircle className="header-logo-icon" />
-          <Link to="/">Task Master</Link>
+          <FileText className="header-logo-icon" />
+          <Link to="/">MonService.ma</Link>
         </div>
         
         {isAuthenticated ? (
           <div className="header-actions">
+            {isAdmin() && (
+              <Link to="/admin" className="header-link">
+                Administration
+              </Link>
+            )}
+            <Link to="/dashboard" className="header-link">
+              Tableau de bord
+            </Link>
             <span className="header-welcome">
-              Bienvenue, {user?.username}
+              <User className="user-icon" />
+              <span className="username">{user?.username}</span>
             </span>
             <button 
               className="btn btn-ghost btn-sm"

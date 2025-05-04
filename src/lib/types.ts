@@ -3,6 +3,7 @@ export interface User {
   id: string;
   username: string;
   email: string;
+  role: "user" | "admin";
 }
 
 export interface LoginCredentials {
@@ -17,12 +18,15 @@ export interface RegisterData {
   confirmPassword: string;
 }
 
-export interface Task {
+export interface ServiceRequest {
   id: string;
   userId: string;
   title: string;
-  completed: boolean;
+  description: string;
+  attachment?: string;
+  status: "pending" | "accepted" | "rejected";
   createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface AuthState {

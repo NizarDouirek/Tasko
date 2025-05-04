@@ -2,12 +2,13 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import { User, AuthState } from "@/lib/types";
 import { authApi } from "@/lib/mockApi";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  isAdmin: () => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -145,11 +146,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const isAdmin = () => {
+    return state.user?.role === "admin";
+  };
+
   const value = {
     ...state,
     login,
     register,
     logout,
+    isAdmin,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
